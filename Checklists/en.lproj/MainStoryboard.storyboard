@@ -6,11 +6,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1468"/>
     </dependencies>
     <scenes>
-        <!--Checklists View Controller - Checklists-->
+        <!--Checklist View Controller - Checklists-->
         <scene sceneID="vF2-D7-G1q">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nz4-SR-svc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="caz-ZB-ooY" customClass="ChecklistsViewController" sceneMemberID="viewController">
+                <tableViewController id="caz-ZB-ooY" customClass="ChecklistViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rfr-3u-eGp">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
