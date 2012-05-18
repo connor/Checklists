@@ -5,6 +5,6 @@
 
 ## FEATURES
 
-- workbooks (i.e. "School", "Personal", etc)
+<del>- workbooks (i.e. "School", "Personal", etc)</del>
 - due dates
 - show remaining # of todos in main screen
