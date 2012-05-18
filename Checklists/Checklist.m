@@ -44,4 +44,9 @@
     return count;
 }
 
+
+- (NSComparisonResult)compare:(Checklist *)otherChecklist {
+    return [self.name localizedCaseInsensitiveCompare:otherChecklist.name];
+}
+
 @end

@@ -15,5 +15,6 @@
 - (void)saveChecklists;
 - (int)indexOfSelectedChecklist;
 - (void)setIndexOfSelectedChecklist:(int)index;
+- (void)sortChecklists;
 
 @end
