@@ -73,13 +73,11 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (indexPath.row == 1) {
         return indexPath;
     } else {
         return nil;
     }
-
 }
 
 - (BOOL) textField:(UITextField *)theTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -104,7 +102,7 @@
 
 - (void)iconPicker:(IconPickerViewController *)picker didPickIcon:(NSString *)theIconName {
     iconName = theIconName;
-    self.iconImageView = [UIImage imageNamed:iconName];
+    self.iconImageView.image = [UIImage imageNamed:iconName];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
