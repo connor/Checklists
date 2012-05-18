@@ -1,5 +1,5 @@
 //
-//  Checklist.h
+//  DataModel.h
 //  Checklists
 //
 //  Created by Connor Montgomery on 5/17/12.
@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Checklist : NSObject <NSCoding>
+@interface DataModel : NSObject
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *lists;
+
+- (void)saveChecklists;
 
 @end

@@ -10,38 +10,15 @@
 #import "ChecklistItem.h"
 #import "ItemDetailViewController.h"
 #import "Checklist.h"
+#import "ChecklistItem.h"
 
 @interface ChecklistViewController ()
 
 @end
 
-@implementation ChecklistViewController {
-
-    NSMutableArray *items;
-    
-}
+@implementation ChecklistViewController
 
 @synthesize checklist;
-
--(void) loadChecklistItems {
-    NSString *path = [self dataFilepath];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSData *data = [[NSData alloc] initWithContentsOfFile:path];
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-        items = [unarchiver decodeObjectForKey:@"ChecklistItems"];
-        [unarchiver finishDecoding];
-    } else {
-        items = [[NSMutableArray alloc] initWithCapacity:20];
-    }
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        [self loadChecklistItems];
-    }
-    return self;
-}
-
 
 - (void)viewDidLoad
 {
@@ -62,7 +39,7 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [items count];
+    return [self.checklist.items count];
 }
 
 
@@ -86,7 +63,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChecklistItem"];
-    ChecklistItem *item = [items objectAtIndex:indexPath.row];
+    ChecklistItem *item = [self.checklist.items objectAtIndex:indexPath.row];;
 
     [self configureCheckmarkForCell:cell withChecklistItem:item];
     [self configureTextForCell:cell withChecklistItem:item];
@@ -99,24 +76,23 @@
    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    ChecklistItem *item = [items objectAtIndex:indexPath.row];
+    ChecklistItem *item = [self.checklist.items objectAtIndex:indexPath.row];
     [item toggleChecked];
     
     [self configureCheckmarkForCell:cell withChecklistItem:item];
-    
-    [self saveChecklistItems];
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
 }
 
 - (void)addItem {
-    int newRowIndex = [items count];
+//    int newRowIndex = [items count];
+    int newRowIndex = [self.checklist.items count];
     
     ChecklistItem *item = [[ChecklistItem alloc] init];
     item.text = @"I am a new row";
     item.checked = NO;
-    [items addObject:item];
+    [self.checklist.items addObject:item];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
     NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
@@ -125,11 +101,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [items removeObjectAtIndex:indexPath.row];
    
-    [self saveChecklistItems];
-    
+    [self.checklist.items objectAtIndex:indexPath.row];
+    [self.checklist.items removeObjectAtIndex:indexPath.row];
+   
     NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
     [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -140,25 +115,23 @@
 
 - (void)itemDetailViewController:(ItemDetailViewController *)controller didFinishAddingItem:(ChecklistItem *)item {
     
-    int newRoundIndex = [items count];
-    [items addObject:item];
+    int newRowIndex = [self.checklist.items count];
+    [self.checklist.items addObject:item];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRoundIndex inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
     NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    [self saveChecklistItems];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)itemDetailViewController:(ItemDetailViewController *)controller didFinishEditingItem:(ChecklistItem *)item {
-    int index = [items indexOfObject:item];
+    int index = [self.checklist.items indexOfObject:item];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [self configureTextForCell:cell withChecklistItem:item];
     
-    [self saveChecklistItems];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -178,28 +151,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    
-    ChecklistItem *item = [items objectAtIndex:indexPath.row];
+   
+    ChecklistItem *item = [self.checklist.items objectAtIndex:indexPath.row];
+
+    [self.checklist.items objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"EditItem" sender:item];
-}
-
-- (NSString *)documentsDirectory {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    return documentsDirectory;
-}
-
-- (NSString *) dataFilepath {
-    return [[self documentsDirectory] stringByAppendingPathComponent:@"Checklists.plist"];
-}
-
-- (void) saveChecklistItems {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:items forKey:@"ChecklistItems"];
-    [archiver finishEncoding];
-    [data writeToFile:[self dataFilepath] atomically:YES];
 }
 
 @end
