@@ -96,6 +96,7 @@
     
     cell.textLabel.text = checklist.name;
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.imageView.image = [UIImage imageNamed:checklist.iconName];
     
     int count = [checklist countUncheckedItems];
     if ([checklist.items count] == 0) {
