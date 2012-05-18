@@ -7,12 +7,42 @@
 //
 
 #import "AllListsViewController.h"
+#import "Checklist.h"
+#import "ChecklistViewController.h"
 
 @interface AllListsViewController ()
 
 @end
 
-@implementation AllListsViewController
+@implementation AllListsViewController {
+    NSMutableArray *lists;
+}
+
+- (id)initWithCoder: (NSCoder *)aDecoder {
+    if (self == [super initWithCoder:aDecoder]) {
+        lists = [[NSMutableArray alloc] initWithCapacity: 20];
+        
+        Checklist *list;
+        
+        list = [[Checklist alloc] init];
+        list.name = @"Birthdays";
+        [lists addObject:list];
+    
+        list = [[Checklist alloc] init];
+        list.name = @"Groceries";
+        [lists addObject:list];
+
+        list = [[Checklist alloc] init];
+        list.name = @"Cool Apps";
+        [lists addObject:list];
+        
+        list = [[Checklist alloc] init];
+        list.name = @"To Do";
+        [lists addObject:list];
+    }
+    
+    return self;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -50,7 +80,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return [lists count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -62,7 +92,10 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"List %d", indexPath.row];
+    Checklist *checklist = [lists objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = checklist.name;
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     return cell;
 }
 
@@ -109,7 +142,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"ShowChecklist" sender:nil];
+    Checklist *checklist = [lists objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"ShowChecklist" sender:checklist];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id) sender {
+    if ([segue.identifier isEqualToString:@"ShowChecklist"]) {
+        ChecklistViewController *controller = segue.destinationViewController;
+        controller.checklist = sender;
+    }
 }
 
 @end

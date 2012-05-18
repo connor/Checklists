@@ -9,6 +9,7 @@
 #import "ChecklistViewController.h"
 #import "ChecklistItem.h"
 #import "ItemDetailViewController.h"
+#import "Checklist.h"
 
 @interface ChecklistViewController ()
 
@@ -19,6 +20,8 @@
     NSMutableArray *items;
     
 }
+
+@synthesize checklist;
 
 -(void) loadChecklistItems {
     NSString *path = [self dataFilepath];
@@ -43,9 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // NSLog(@"Documents folder is: %@", [self documentsDirectory]);
-    // NSLog(@"Data file path is: %@", [self dataFilepath]);
+    self.title = self.checklist.name;
 }
 
 - (void)viewDidUnload
